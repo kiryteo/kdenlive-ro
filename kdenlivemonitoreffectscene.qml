@@ -537,7 +537,7 @@ Item {
 <<<<<<< HEAD
     
     OpacitySlider {
-        id: opacityslider
+        id: opacityslider //try with opacity
         anchors {
             left: parent.left
             top: parent.top
@@ -547,7 +547,7 @@ Item {
     }
 
     RotationSlider {
-        id: rotationslider
+        id: rotationslider //try with rotation
         anchors {
             left: parent.left
             top: parent.top
