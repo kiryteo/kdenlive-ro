@@ -49,7 +49,7 @@ GeometryWidget::GeometryWidget(Monitor *monitor, QPair<int, int> range, const QR
     if (!comment.isEmpty()) {
         comment = i18n(comment.toUtf8().data());
     }*/
-    
+
     auto *horLayout = new QHBoxLayout;
     horLayout->setSpacing(2);
     m_spinX = new DragValue(i18nc("x axis position", "X"), 0, 0, -99000, 99000, -1, QString(), false, this);
@@ -403,16 +403,16 @@ void GeometryWidget::setValue(const QRect r, double opacity)
     m_monitor->setUpEffectGeometry(r);
 }
 
-void GeometryWidget::slotUpdateOpacity(qreal value)
+void GeometryWidget::slotUpdateOpacity(double value)
 {
     m_opacity->setValue(value);
 }
 
-void GeometryWidget::slotUpdateRotation(qreal value)
+void GeometryWidget::slotUpdateRotation(double value)
 {
-    if(m_rotationWidget) {
-        m_rotationWidget->setValue(value);
-    }
+   // if(m_rotationWidget) {
+    m_rotation->setValue(value);
+    //}
 }
 
 const QString GeometryWidget::getValue() const
@@ -431,8 +431,8 @@ void GeometryWidget::connectMonitor(bool activate)
         m_monitor->setEffectSceneProperty(QStringLiteral("showRotation"), true);
         m_monitor->setEffectSceneProperty(QStringLiteral("showOpacity"), true);
         connect(m_monitor, &Monitor::effectChanged, this, &GeometryWidget::slotUpdateGeometryRect, Qt::UniqueConnection);
-        connect(m_monitor, SIGNAL(opacityChanged(qreal)), this, SLOT(slotUpdateOpacity(qreal)), Qt::UniqueConnection);
-        connect(m_monitor, SIGNAL(angleChanged()), this, SLOT(slotUpdateRotation(qreal)), Qt::UniqueConnection);
+        connect(m_monitor, &Monitor::opacityChanged, this, &GeometryWidget::slotUpdateOpacity, Qt::UniqueConnection);
+        connect(m_monitor, &Monitor::angleChanged, this, &GeometryWidget::slotUpdateRotation, Qt::UniqueConnection);
         QRect rect(m_spinX->value(), m_spinY->value(), m_spinWidth->value(), m_spinHeight->value());
         m_monitor->setUpEffectGeometry(rect);
         /*double ratio = (double)m_spinWidth->value() / m_spinHeight->value();
@@ -449,8 +449,8 @@ void GeometryWidget::connectMonitor(bool activate)
     } else {
         m_monitor->slotShowEffectScene(MonitorSceneDefault);
         disconnect(m_monitor, &Monitor::effectChanged, this, &GeometryWidget::slotUpdateGeometryRect);
-        disconnect(m_monitor, SIGNAL(opacityChanged(qreal)), this, SLOT(slotUpdateOpacity(qreal)));
-        disconnect(m_monitor, SIGNAL(angleChanged()), this, SLOT(slotUpdateRotation(qreal)));
+        disconnect(m_monitor, &Monitor::opacityChanged, this, &GeometryWidget::slotUpdateOpacity);
+        disconnect(m_monitor, &Monitor::angleChanged, this, &GeometryWidget::slotUpdateRotation);
     }
 }
 
